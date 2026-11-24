@@ -259,7 +259,7 @@ export default function Lobby({ onStart, onOpenBoard, hasGame, resume, onCloseGa
               + Add group ({groupNames.length}/{MAX_GROUPS})
             </Button>
           )}
-          <p className="mt-2 text-xs text-muted">Groups of 4 to 8 work best. A group needs at least {MIN_GROUP_SIZE} students to play.</p>
+          <p className="mt-2 text-xs text-muted">Groups of 4 to 8 work best. Every group needs at least {MIN_GROUP_SIZE} students to start.</p>
 
           <Button className="mt-4 w-full" disabled={!session || finalized || busy} onClick={finalizeGroups}>
             {finalized ? 'Groups finalized' : 'Finalize groups'}
@@ -379,13 +379,14 @@ export default function Lobby({ onStart, onOpenBoard, hasGame, resume, onCloseGa
                     </span>
                   </label>
 
-                  {smallGroups > 0 && players.some((p) => p.approval_status === 'approved') && (
-                    <p className="mt-3 text-xs font-bold text-warn">
-                      {smallGroups} group{smallGroups === 1 ? ' has' : 's have'} fewer than {MIN_GROUP_SIZE} students and will sit out until they have enough.
+                  {smallGroups > 0 && (
+                    <p className="mt-3 text-sm font-bold text-warn">
+                      Every group needs at least {MIN_GROUP_SIZE} students to start. Still short:{' '}
+                      {groupNames.map((_, i) => i).filter((i) => sizes[i] < MIN_GROUP_SIZE).map((i) => `${groupLabel(i)} (${sizes[i]})`).join(', ')}.
                     </p>
                   )}
 
-                  <Button className="mt-4 w-full text-lg" disabled={busy || pickedTopics.length === 0 || termEstimate < 2} onClick={start}>
+                  <Button className="mt-4 w-full text-lg" disabled={busy || pickedTopics.length === 0 || termEstimate < 2 || smallGroups > 0} onClick={start}>
                     {busy ? 'Starting…' : 'Start round 1'}
                   </Button>
                 </>
