@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { impGame } from './api'
 import Board from './Board'
 import Lobby from './Lobby'
+import ReviewDashboard from './questions/ReviewDashboard'
+import SubmitQuestions from './questions/SubmitQuestions'
 import StudentJoin from './StudentJoin'
 import { HUB_URL, SITE_NAME, SITE_TAGLINE } from './config'
 import { readSession, saveSession } from './session'
@@ -11,12 +13,16 @@ import { Button, CenterCard } from './ui'
 // Routes:
 //   /       leader: landing -> lobby -> board (the projector)
 //   /join   student phone: join with the code, get a group, play each round
-// The terms are the answers of approved open-response questions (the Escape Room's question bank), so new
-// terms are submitted and reviewed on the Escape Room site.
+//   /submit public question form (open response)
+//   /review reviewers (one email sign-in): review queue, question bank, subjects & courses, reviewers
+// The terms are the answers of approved open-response questions, the same bank as the Escape Room, so a
+// question submitted or approved on either site shows up in both.
 function App() {
   const path = window.location.pathname.replace(/\/+$/, '')
   if (!isConfigured) return <NotConfigured />
   if (path === '/join') return <StudentJoin />
+  if (path === '/submit') return <SubmitQuestions />
+  if (path === '/review') return <ReviewDashboard />
   return <LeaderApp />
 }
 

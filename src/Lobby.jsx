@@ -159,6 +159,10 @@ export default function Lobby({ onStart, onOpenBoard, hasGame, resume, onCloseGa
         <p className="mt-3 text-muted">Sort your students into groups. Every group gets its own secret term each round.</p>
         <p className="mt-2 text-sm font-bold">
           <a href={HUB_URL} className="text-info hover:brightness-125">← All games</a>
+          <span className="mx-2 text-muted">·</span>
+          <a href="/submit" className="text-info hover:brightness-125">Submit questions</a>
+          <span className="mx-2 text-muted">·</span>
+          <a href="/review" className="text-info hover:brightness-125">Review queue</a>
         </p>
 
         <div className="mt-6">
@@ -268,7 +272,7 @@ export default function Lobby({ onStart, onOpenBoard, hasGame, resume, onCloseGa
               {catalogError && <p className="text-bad">{catalogError}</p>}
               {!catalog && !catalogError && <p className="text-muted">Loading subjects…</p>}
               {catalog && subjects.length === 0 && (
-                <p className="text-muted">No subjects have short-answer terms yet. Terms come from approved open-response questions on the Escape Room site.</p>
+                <p className="text-muted">No subjects have short-answer terms yet. Terms come from approved open-response questions: submit some, then approve them in the review queue.</p>
               )}
 
               {subjects.length > 0 && (

@@ -1,10 +1,16 @@
 import { supabase } from './supabase'
 
+// The submit and review pages work on the Escape Room's open-response questions (Imposter's terms are their
+// answers), so those calls say they're for escape_room: same subjects, same queue, on either site.
+const QUESTION_GAME = 'escape_room'
+const GAME_AWARE = ['submit-questions', 'review']
+
 // Every backend call goes through here. The backend is the shared Supabase project's Edge Functions.
 export async function callFunction(name, payload, fallbackMessage) {
   if (!supabase) throw new Error('Supabase is not set up yet. See the README.')
 
-  const { data, error } = await supabase.functions.invoke(name, { body: payload })
+  const body = GAME_AWARE.includes(name) ? { game: QUESTION_GAME, ...payload } : payload
+  const { data, error } = await supabase.functions.invoke(name, { body })
   if (error) {
     // Non-2xx responses leave data empty; the server's message is in the response body
     let message = error.message || fallbackMessage
@@ -39,3 +45,6 @@ export function watchGame(gameId, events, onChange, fallbackMs = 15000) {
     supabase.removeChannel(channel)
   }
 }
+
+// The shared review server
+export const review = (payload, fallback = 'Something went wrong.') => callFunction('review', payload, fallback)

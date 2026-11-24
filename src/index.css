@@ -107,3 +107,14 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .stamp-in, .spotlight, .hover-bob, .animate-pulse { animation: none; }
 }
+
+/* The submit and review pages (copied from the Escape Room) use these too */
+.theme-vault { color: var(--color-ink); }
+.glow-ok { text-shadow: 0 0 12px rgb(79 216 255 / 0.7); }
+.box-glow-ok { box-shadow: 0 0 0 1px rgb(79 216 255 / 0.6), 0 0 18px rgb(79 216 255 / 0.3); }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+.shake { animation: shake 0.4s ease-in-out; }
