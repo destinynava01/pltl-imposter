@@ -20,6 +20,3 @@ export const FLAG_REASONS = [
   { value: 'other', label: 'Other' },
 ]
 
-// Lab questions are the same for every professor, so they're filed under this one shared "professor".
-// The submit form and the review editor start with it filled in.
-export const LAB_PROFESSOR = 'Laboratory'

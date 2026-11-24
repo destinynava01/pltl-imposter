@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { impGame } from './api'
 import Board from './Board'
 import Lobby from './Lobby'
-import ReviewDashboard from './questions/ReviewDashboard'
-import SubmitQuestions from './questions/SubmitQuestions'
+import PromptReview from './PromptReview'
+import PromptSubmit from './PromptSubmit'
 import StudentJoin from './StudentJoin'
 import { HUB_URL, SITE_NAME, SITE_TAGLINE } from './config'
 import { readSession, saveSession } from './session'
@@ -13,16 +13,15 @@ import { Button, CenterCard } from './ui'
 // Routes:
 //   /       leader: landing -> lobby -> board (the projector)
 //   /join   student phone: join with the code, get a group, play each round
-//   /submit public question form (open response)
-//   /review reviewers (one email sign-in): review queue, question bank, subjects & courses, reviewers
-// The terms are the answers of approved open-response questions, the same bank as the Escape Room, so a
-// question submitted or approved on either site shows up in both.
+//   /submit public form: new terms (a term plus a short description), filed under a chapter
+//   /review reviewers (same sign-in and reviewer list as the other sites): approve, edit, reject terms
+// Terms are Imposter's own approved prompts and, if the leader turns it on, short multiple-choice answers.
 function App() {
   const path = window.location.pathname.replace(/\/+$/, '')
   if (!isConfigured) return <NotConfigured />
   if (path === '/join') return <StudentJoin />
-  if (path === '/submit') return <SubmitQuestions />
-  if (path === '/review') return <ReviewDashboard />
+  if (path === '/submit') return <PromptSubmit />
+  if (path === '/review') return <PromptReview />
   return <LeaderApp />
 }
 

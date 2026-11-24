@@ -5,9 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  // src/questions is the Escape Room's submit/review code, copied as is (it has the same lint findings
-  // there), so it is left out of linting here
-  globalIgnores(['dist', 'src/questions']),
+  globalIgnores(['dist']),
   {
     files: ['**/*.{js,jsx}'],
     extends: [

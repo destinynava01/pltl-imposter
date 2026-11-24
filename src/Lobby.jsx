@@ -26,6 +26,7 @@ export default function Lobby({ onStart, onOpenBoard, hasGame, resume, onCloseGa
   const [pickedTopics, setPickedTopics] = useState([])
   const [thinkSeconds, setThinkSeconds] = useState(DEFAULT_THINK)
   const [hardMode, setHardMode] = useState(false)
+  const [useMc, setUseMc] = useState(false) // also draw terms from multiple-choice answers
   const [busy, setBusy] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [players, setPlayers] = useState([])
@@ -130,6 +131,7 @@ export default function Lobby({ onStart, onOpenBoard, hasGame, resume, onCloseGa
         team_names: groupNames.map((_, i) => groupLabel(i)),
         think_seconds: thinkSeconds,
         hard_mode: hardMode,
+        use_mc: useMc,
       })
       if (data.round?.error) setErrorMessage(data.round.error)
       onStart(session)
@@ -140,7 +142,8 @@ export default function Lobby({ onStart, onOpenBoard, hasGame, resume, onCloseGa
     }
   }
 
-  const termEstimate = topics.filter((t) => pickedTopics.includes(t.id)).reduce((n, t) => n + t.term_count, 0)
+  const termsIn = (t) => t.prompt_count + (useMc ? t.mc_count : 0)
+  const termEstimate = topics.filter((t) => pickedTopics.includes(t.id)).reduce((n, t) => n + termsIn(t), 0)
   const joinUrl = session ? `${window.location.origin}/join?code=${session.joinCode}` : ''
   const sizes = groupNames.map((_, i) => players.filter((p) => p.approval_status === 'approved' && p.team_index === i).length)
   const smallGroups = sizes.filter((n) => n < MIN_GROUP_SIZE).length
@@ -272,7 +275,7 @@ export default function Lobby({ onStart, onOpenBoard, hasGame, resume, onCloseGa
               {catalogError && <p className="text-bad">{catalogError}</p>}
               {!catalog && !catalogError && <p className="text-muted">Loading subjects…</p>}
               {catalog && subjects.length === 0 && (
-                <p className="text-muted">No subjects have short-answer terms yet. Terms come from approved open-response questions: submit some, then approve them in the review queue.</p>
+                <p className="text-muted">No chapters have terms yet. Add some on the Submit page, then approve them in the review queue.</p>
               )}
 
               {subjects.length > 0 && (
@@ -330,17 +333,32 @@ export default function Lobby({ onStart, onOpenBoard, hasGame, resume, onCloseGa
                           <label className={`flex cursor-pointer items-center gap-3 rounded-lg border-2 px-3 py-2 text-sm transition hover:bg-hover ${on ? 'border-info bg-info-soft' : 'border-line bg-panel'}`}>
                             <input type="checkbox" checked={on} onChange={() => toggleTopic(t.id)} className="h-4 w-4 accent-green-400" />
                             <span className="flex-1 font-bold">{t.topic_name}</span>
-                            <span className="text-xs text-muted">{t.term_count} term{t.term_count === 1 ? '' : 's'}</span>
+                            <span className={`text-xs ${termsIn(t) === 0 ? 'text-warn' : 'text-muted'}`}>
+                              {t.prompt_count} term{t.prompt_count === 1 ? '' : 's'}{useMc && t.mc_count > 0 ? ` + ${t.mc_count} MC` : ''}
+                            </span>
                           </label>
                         </li>
                       )
                     })}
                   </ul>
                   {pickedTopics.length > 0 && (
-                    <p className="mt-2 text-xs font-bold text-muted">
-                      {termEstimate} secret terms to draw from. Each group gets a different one every round.
+                    <p className={`mt-2 text-xs font-bold ${termEstimate < 2 ? 'text-warn' : 'text-muted'}`}>
+                      {termEstimate < 2
+                        ? 'Not enough approved terms in these chapters yet. Pick more chapters, turn on multiple-choice answers, or add terms on the Submit page.'
+                        : `${termEstimate} secret terms to draw from. Each group gets a different one every round.`}
                     </p>
                   )}
+
+                  <label className={`mt-4 flex cursor-pointer items-start gap-3 rounded-lg border-2 p-3 ${useMc ? 'border-info bg-info-soft' : 'border-line bg-panel'}`}>
+                    <input type="checkbox" checked={useMc} onChange={(e) => setUseMc(e.target.checked)} className="mt-1 h-4 w-4 accent-purple-400" />
+                    <span>
+                      <span className="font-bold">Also use multiple-choice answers</span>
+                      <span className="block text-sm text-muted">
+                        Adds short answers from the Jeopardy and Monopoly questions in these chapters (like &ldquo;Mitochondria&rdquo;).
+                        Numbers, true/false and answers like &ldquo;More acidic&rdquo; are left out.
+                      </span>
+                    </span>
+                  </label>
 
                   <Label className="mt-4">Thinking time</Label>
                   <div className="mt-2 grid grid-cols-5 gap-2">
