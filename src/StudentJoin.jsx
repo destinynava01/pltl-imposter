@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { impPlay, watchGame } from './api'
 import Picture from './Picture'
-import { Button, CenterCard, Label, Tape } from './ui'
+import { Button, CenterCard, Label, Beam } from './ui'
 import { clock } from './time'
 
 const STORAGE_KEY = 'pltlImposterStudent'
@@ -143,7 +143,7 @@ function Room({ saved, onLeave }) {
   }
 
   if (!view) {
-    return <CenterCard title="Imposter"><p className="mt-4 text-muted">{error || 'Connecting…'}</p></CenterCard>
+    return <CenterCard title="👽 Imposter"><p className="mt-4 text-muted">{error || 'Connecting…'}</p></CenterCard>
   }
 
   const { player, groups, round } = view
@@ -165,8 +165,8 @@ function Room({ saved, onLeave }) {
   }
 
   return (
-    <main className="noir-bg min-h-dvh text-ink">
-      <Tape className="h-1.5" />
+    <main className="space-bg min-h-dvh text-ink">
+      <Beam className="h-1.5" />
       <div className="mx-auto max-w-md space-y-4 p-4">
         <header className="flex items-center justify-between gap-2">
           <div className="min-w-0">
@@ -216,21 +216,21 @@ function RoundView({ round, thinkingLeft, sending, send }) {
     <>
       {/* The secret: hidden on request so nobody can read it over your shoulder */}
       {!reveal && round.phase !== 'guess' && (
-        <section className={`relative overflow-hidden rounded-2xl p-6 text-center ${round.imposter ? 'border-2 border-accent bg-bad-soft box-glow-accent' : 'case-file'}`}>
+        <section className={`relative overflow-hidden rounded-2xl p-6 text-center ${round.imposter ? 'border-2 border-accent bg-accent-soft box-glow-accent' : 'holo'}`}>
           {hidden ? (
             <button type="button" onClick={() => setHidden(false)} className="w-full py-6 font-mono text-lg">👁 Tap to show your secret</button>
           ) : round.imposter ? (
             <>
-              <p className="text-5xl" aria-hidden="true">🕵️</p>
-              <p className="mt-2 font-display text-3xl uppercase text-accent glow-accent">You&apos;re the imposter</p>
+              <p className="text-6xl" aria-hidden="true"><span className="hover-bob">👽</span></p>
+              <p className="mt-2 font-display text-3xl uppercase text-accent glow-accent">You&apos;re the alien</p>
               <p className="mt-2 font-mono">Topic: <b>{round.chapter}</b></p>
-              <p className="mt-2 text-sm text-muted">You don&apos;t know the term. Listen to the others and give a clue that blends in.</p>
+              <p className="mt-2 text-sm text-muted">You don&apos;t know the term. Listen to the crew and give a clue that blends in.</p>
             </>
           ) : (
             <>
               <p className="font-mono text-xs uppercase tracking-widest opacity-70">Your secret term · {round.chapter}</p>
               <p className="mt-1 font-display text-4xl uppercase leading-tight">{round.term}</p>
-              <p className="mt-2 text-sm opacity-80">One of your group doesn&apos;t have this. Don&apos;t say it!</p>
+              <p className="mt-2 text-sm opacity-80">An alien in your crew doesn&apos;t have this. Don&apos;t say it!</p>
             </>
           )}
           {!hidden && (
@@ -249,7 +249,7 @@ function RoundView({ round, thinkingLeft, sending, send }) {
       )}
 
       {round.phase === 'speak' && !thinking && (
-        <section className={`rounded-2xl border-2 p-5 text-center ${round.my_turn ? 'spotlight border-info bg-warn-soft' : 'border-line bg-card'}`}>
+        <section className={`rounded-2xl border-2 p-5 text-center ${round.my_turn ? 'spotlight border-info bg-info-soft' : 'border-line bg-card'}`}>
           {round.my_turn ? (
             <>
               <p className="text-5xl" aria-hidden="true">🎤</p>
@@ -271,7 +271,7 @@ function RoundView({ round, thinkingLeft, sending, send }) {
 
       {round.phase === 'vote' && (
         <section className="rounded-2xl border-2 border-accent bg-card p-5 box-glow-accent">
-          <p className="text-center font-display text-2xl uppercase text-accent">Who&apos;s the imposter?</p>
+          <p className="text-center font-display text-2xl uppercase text-accent">Who&apos;s the alien?</p>
           <p className="text-center text-sm text-muted">{round.votes_in} of {round.voters} voted · you can change your vote until everyone has voted</p>
           <div className="mt-3 grid gap-2">
             {round.order.filter((p) => !p.me).map((p) => {
@@ -294,9 +294,9 @@ function RoundView({ round, thinkingLeft, sending, send }) {
 
       {round.phase === 'guess' && (
         round.can_guess ? (
-          <section className="rounded-2xl border-2 border-accent bg-bad-soft p-5 text-center box-glow-accent">
-            <p className="stamp stamp-in text-2xl text-accent">Caught</p>
-            <p className="mt-3 text-lg font-bold">You were the imposter!</p>
+          <section className="rounded-2xl border-2 border-accent bg-accent-soft p-5 text-center box-glow-accent">
+            <p className="stamp stamp-in text-2xl text-accent">Unmasked</p>
+            <p className="mt-3 text-lg font-bold">You were the alien!</p>
             <p className="mt-1 text-sm text-muted">One guess: what was the group&apos;s secret term? Get it right and you still win.</p>
             <form
               className="mt-3 space-y-2"
@@ -307,7 +307,7 @@ function RoundView({ round, thinkingLeft, sending, send }) {
             </form>
           </section>
         ) : (
-          <Panel title="Caught!" text={`${round.imposter_name} was the imposter. They get one guess at the term…`} />
+          <Panel title="Caught!" text={`${round.imposter_name} was the alien. They get one guess at the term…`} />
         )
       )}
 
@@ -320,7 +320,7 @@ function Order({ order }) {
   return (
     <ol className="mt-3 space-y-1 text-left">
       {order.map((p, k) => (
-        <li key={p.id} className={`flex items-center gap-2 rounded-lg px-3 py-1 ${p.speaking ? 'bg-warn-soft font-bold text-info' : p.done ? 'text-muted line-through' : ''}`}>
+        <li key={p.id} className={`flex items-center gap-2 rounded-lg px-3 py-1 ${p.speaking ? 'bg-info-soft font-bold text-info' : p.done ? 'text-muted line-through' : ''}`}>
           <span className="w-5 font-mono text-xs">{k + 1}</span>
           <span className="flex-1">{p.name}{p.me ? ' (you)' : ''}</span>
           {p.speaking && <span aria-hidden="true">🎤</span>}
@@ -337,21 +337,21 @@ function RevealView({ round }) {
   const iWon = round.you_were_imposter ? imposterWon : !imposterWon
   return (
     <section className="space-y-3">
-      <div className={`rounded-2xl border-2 p-5 text-center ${iWon ? 'border-ok bg-ok-soft' : 'border-accent bg-bad-soft'}`}>
-        <p className={`stamp stamp-in text-3xl ${iWon ? 'text-ok' : 'text-accent'}`}>{iWon ? 'You win' : 'You lose'}</p>
+      <div className={`rounded-2xl border-2 p-5 text-center ${iWon ? 'border-ok bg-ok-soft' : 'border-bad bg-bad-soft'}`}>
+        <p className={`stamp stamp-in text-3xl ${iWon ? 'text-ok' : 'text-bad'}`}>{iWon ? 'You win' : 'You lose'}</p>
         <p className="mt-3 text-lg">
-          {round.you_were_imposter ? 'You were' : <><b>{round.imposter_name}</b> was</>} the imposter
+          {round.you_were_imposter ? 'You were' : <><b>{round.imposter_name}</b> was</>} the alien
           {!round.caught ? ' and got away.' : round.guess_correct ? `, got caught, but guessed it ("${round.guess}").` : ' and got caught.'}
         </p>
         {round.caught && !round.guess_correct && round.guess && <p className="text-sm text-muted">Their guess: &ldquo;{round.guess}&rdquo;</p>}
         {!round.caught && <p className="text-sm text-muted">{round.accused ? `Most votes went to ${round.accused}.` : 'The vote was a tie.'}</p>}
       </div>
 
-      <div className="case-file rounded-2xl p-5">
+      <div className="holo rounded-2xl p-5">
         <p className="font-mono text-xs uppercase tracking-widest opacity-70">The secret term</p>
         <p className="font-display text-3xl uppercase">{round.real_term}</p>
-        {round.decoy_term && <p className="mt-1 font-mono text-sm">The imposter had: <b>{round.decoy_term}</b></p>}
-        {round.question_text && <p className="mt-3 border-t border-black/20 pt-2 text-sm">{round.question_text}</p>}
+        {round.decoy_term && <p className="mt-1 font-mono text-sm">The alien had: <b>{round.decoy_term}</b></p>}
+        {round.question_text && <p className="mt-3 border-t border-line pt-2 text-sm">{round.question_text}</p>}
         <Picture path={round.image_path} className="max-h-48" />
       </div>
       <p className="text-center text-sm text-muted">Waiting for the next round…</p>

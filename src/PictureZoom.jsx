@@ -82,8 +82,8 @@ export default function PictureZoom({ path, onClose, panel = null, title = 'Pict
     'rounded-lg border border-accent/60 bg-black/70 px-3 py-1.5 font-display text-sm font-bold text-accent hover:bg-black'
 
   return (
-    <div className="noir-bg fixed inset-0 z-[60] flex flex-col text-ink lg:flex-row" role="dialog" aria-modal="true" aria-label={title}>
-      <div aria-hidden="true" className="tape pointer-events-none absolute inset-x-0 top-0 z-10 h-1.5" />
+    <div className="space-bg fixed inset-0 z-[60] flex flex-col text-ink lg:flex-row" role="dialog" aria-modal="true" aria-label={title}>
+      <div aria-hidden="true" className="beam pointer-events-none absolute inset-x-0 top-0 z-10 h-1.5" />
       <div className="relative min-h-0 flex-1 overflow-hidden">
         <div
           className="flex h-full w-full cursor-grab touch-none items-center justify-center active:cursor-grabbing"

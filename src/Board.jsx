@@ -3,7 +3,7 @@ import { impGame, watchGame } from './api'
 import EndGame from './EndGame'
 import Picture from './Picture'
 import { MIN_GROUP_SIZE, SITE_NAME } from './config'
-import { Button, Label, Tape } from './ui'
+import { Button, Label, Beam } from './ui'
 import { clock } from './time'
 
 // The projector: thinking time, each group's speaking order and vote, then the reveal and the teaching moment.
@@ -61,8 +61,8 @@ export default function Board({ session, onLobby, onNewGame }) {
 
   if (!board) {
     return (
-      <main className="noir-bg flex min-h-dvh items-center justify-center text-ink">
-        <p className="text-muted">{error || 'Opening the case files…'}</p>
+      <main className="space-bg flex min-h-dvh items-center justify-center text-ink">
+        <p className="text-muted">{error || 'Scanning the ship…'}</p>
       </main>
     )
   }
@@ -77,7 +77,7 @@ export default function Board({ session, onLobby, onNewGame }) {
   const allDone = rounds.length > 0 && unfinished === 0
 
   return (
-    <main className="noir-bg min-h-dvh p-4 text-ink sm:p-6">
+    <main className="space-bg min-h-dvh p-4 text-ink sm:p-6">
       <header className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
         <div>
           <p className="font-mono text-xs uppercase tracking-[0.3em] text-info">{SITE_NAME} · join code {session.joinCode}</p>
@@ -113,11 +113,11 @@ export default function Board({ session, onLobby, onNewGame }) {
 
       {thinking && (
         <section className="mx-auto mt-6 max-w-3xl overflow-hidden rounded-2xl border-2 border-info bg-card text-center box-glow-info">
-          <Tape />
+          <Beam />
           <div className="p-6">
             <Label>Thinking time</Label>
             <p className="mt-2 font-display text-7xl text-info glow-info sm:text-8xl">{clock(thinkingLeft)}</p>
-            <p className="mt-2 text-lg text-muted">Look at your phone. Plan one clue: precise enough to prove you know it, vague enough to hide it.</p>
+            <p className="mt-2 text-lg text-muted">Check your phone. Plan one clue: precise enough to prove you're human, vague enough that the alien can't copy it.</p>
             <Button variant="outline" className="mt-4 !px-4 !py-2 text-sm" disabled={busy} onClick={() => act({ action: 'end_think' })}>
               Start speaking now
             </Button>
@@ -149,7 +149,7 @@ export default function Board({ session, onLobby, onNewGame }) {
             ))}
           </ol>
           <p className="mt-3 border-t border-line pt-2 text-xs text-muted">
-            Imposter caught: everyone else in the group +1. Imposter gets away, or guesses the term: imposter +2.
+            Alien unmasked: the rest of the crew +1. Alien escapes, or guesses the term: alien +2.
           </p>
         </aside>
       </div>
@@ -157,7 +157,7 @@ export default function Board({ session, onLobby, onNewGame }) {
   )
 }
 
-const PHASE_LABEL = { speak: 'Clues', vote: 'Voting', guess: 'Last guess', reveal: 'Case closed' }
+const PHASE_LABEL = { speak: 'Clues', vote: 'Voting', guess: 'Last guess', reveal: 'Scan complete' }
 
 function GroupCard({ group, thinking, busy, act }) {
   const r = group.round
@@ -186,7 +186,7 @@ function GroupCard({ group, thinking, busy, act }) {
                 <li
                   key={p.id}
                   className={`flex items-center gap-3 rounded-lg border-2 px-3 py-1.5 ${
-                    p.speaking && !thinking ? 'spotlight border-info bg-warn-soft text-ink' : p.done ? 'border-transparent text-muted line-through' : 'border-line bg-panel'
+                    p.speaking && !thinking ? 'spotlight border-info bg-info-soft text-ink' : p.done ? 'border-transparent text-muted line-through' : 'border-line bg-panel'
                   }`}
                 >
                   <span className="w-5 font-mono text-sm">{k + 1}</span>
@@ -208,7 +208,7 @@ function GroupCard({ group, thinking, busy, act }) {
         {r && r.phase === 'vote' && (
           <div className="text-center">
             <p className="font-display text-5xl text-accent glow-accent">{r.votes_in} / {r.voters}</p>
-            <p className="mt-1 text-muted">voted. Who&apos;s the imposter?</p>
+            <p className="mt-1 text-muted">voted. Who&apos;s the alien?</p>
             <div className="mx-auto mt-3 h-2 max-w-xs overflow-hidden rounded-full bg-panel">
               <div className="h-full bg-accent transition-all" style={{ width: `${r.voters ? (100 * r.votes_in) / r.voters : 0}%` }} />
             </div>
@@ -220,8 +220,8 @@ function GroupCard({ group, thinking, busy, act }) {
 
         {r && r.phase === 'guess' && (
           <div className="text-center">
-            <p className="stamp stamp-in text-3xl text-ok">Caught</p>
-            <p className="mt-3 text-lg"><span className="font-bold text-accent">{r.imposter}</span> was the imposter.</p>
+            <p className="stamp stamp-in text-3xl text-ok">Unmasked</p>
+            <p className="mt-3 text-lg"><span className="font-bold text-accent">{r.imposter}</span> was the alien. 👽</p>
             <p className="mt-1 text-muted">They get one guess at the term… if they get it, they still win.</p>
             <Button variant="outline" className="mt-3 !px-3 !py-1.5 text-xs" disabled={busy} onClick={() => act('skip_guess')}>Skip the guess</Button>
           </div>
@@ -233,17 +233,17 @@ function GroupCard({ group, thinking, busy, act }) {
   )
 }
 
-// The case closed: who it was, how the vote went, and the term with the question it came from (to teach from)
+// Scan complete: who it was, how the vote went, and the term with the question it came from (to teach from)
 function Reveal({ r }) {
   const imposterWon = !r.caught || r.guess_correct
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className={`stamp stamp-in text-2xl ${imposterWon ? 'text-accent' : 'text-ok'}`}>
-          {!r.caught ? 'Got away' : r.guess_correct ? 'Stole it' : 'Caught'}
+          {!r.caught ? 'Escaped' : r.guess_correct ? 'Stole it' : 'Unmasked'}
         </p>
         <p className="text-right">
-          Imposter: <span className="font-bold text-accent">{r.imposter}</span>
+          Alien: <span className="font-bold text-accent">{r.imposter}</span>
           <span className="block text-sm text-muted">
             {r.accused ? `Most votes: ${r.accused}` : 'The vote was a tie'}
             {r.guess ? ` · guessed "${r.guess}"` : ''}
@@ -261,11 +261,11 @@ function Reveal({ r }) {
         </ul>
       )}
 
-      <div className="case-file mt-4 rounded-lg p-4">
+      <div className="holo mt-4 rounded-lg p-4">
         <p className="font-mono text-xs uppercase tracking-widest opacity-70">Secret term · {r.chapter}</p>
         <p className="font-display text-3xl uppercase">{r.term}</p>
-        {r.decoy && <p className="mt-1 font-mono text-sm">The imposter had: <b>{r.decoy}</b></p>}
-        {r.question_text && <p className="mt-3 border-t border-black/20 pt-2 text-sm">{r.question_text}</p>}
+        {r.decoy && <p className="mt-1 font-mono text-sm">The alien had: <b>{r.decoy}</b></p>}
+        {r.question_text && <p className="mt-3 border-t border-line pt-2 text-sm">{r.question_text}</p>}
         <Picture path={r.image_path} className="max-h-48" />
       </div>
     </div>

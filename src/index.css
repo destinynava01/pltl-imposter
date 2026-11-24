@@ -1,31 +1,32 @@
 @import "tailwindcss";
 
 /*
-  The look: a late-night interrogation room. Near-black walls, a single warm lamp overhead, case-file paper,
-  and a red "suspect" stamp. Every color the screens use is one of these tokens, so the look is changed here.
+  The look: a spaceship drifting at night. Deep-space navy, a starfield, a UFO's green tractor beam, nebula
+  purple, and holographic panels. Alien green marks the alien (the imposter); cyan marks the crew winning.
+  Every color the screens use is one of these tokens, so the look is changed here.
 */
 @theme {
-  --color-board: #0c0a0f;      /* page background */
-  --color-card: #17131c;       /* panels */
-  --color-panel: #221c29;      /* inputs, rows inside a panel */
-  --color-hover: #2e2637;      /* hover on rows and outline buttons */
-  --color-line: #3f3549;       /* borders */
-  --color-ink: #f4efe6;        /* text */
-  --color-muted: #a99fb4;      /* secondary text */
-  --color-accent: #e5484d;     /* suspect red: titles, main buttons, the imposter */
-  --color-on-accent: #ffffff;
-  --color-info: #f2c46d;       /* lamp gold: labels, links, the speaker */
-  --color-ok: #3ccf91;         /* caught / safe */
-  --color-ok-soft: #10291f;
-  --color-bad: #ff6369;
-  --color-bad-soft: #2f1316;
-  --color-warn: #f2c46d;
-  --color-warn-soft: #2b220f;
-  --color-paper: #efe6d2;      /* case-file paper */
-  --color-paper-ink: #2a2118;
+  --color-board: #05060f;      /* page background: deep space */
+  --color-card: #0d1124;       /* panels */
+  --color-panel: #151a33;      /* inputs, rows inside a panel */
+  --color-hover: #1f2547;      /* hover on rows and outline buttons */
+  --color-line: #2c3463;       /* borders */
+  --color-ink: #e9f1ff;        /* text */
+  --color-muted: #9aa6cc;      /* secondary text */
+  --color-accent: #39ff88;     /* alien green: titles, main buttons, the alien */
+  --color-accent-soft: #0b2a1b;
+  --color-on-accent: #03140a;
+  --color-info: #b48cff;       /* nebula purple: labels, links, the speaker */
+  --color-info-soft: #211a3f;
+  --color-ok: #4fd8ff;         /* the crew wins: the alien unmasked */
+  --color-ok-soft: #0b2633;
+  --color-bad: #ff5c8a;        /* you lose */
+  --color-bad-soft: #2e0f1d;
+  --color-warn: #ffd166;
+  --color-warn-soft: #2b230f;
 
-  --font-display: "Black Ops One", system-ui, sans-serif;
-  --font-mono: "Special Elite", ui-monospace, monospace;
+  --font-display: "Audiowide", system-ui, sans-serif;
+  --font-mono: "Space Mono", ui-monospace, monospace;
 }
 
 body {
@@ -34,58 +35,75 @@ body {
   color: var(--color-ink);
 }
 
-/* The room: one warm lamp overhead, darkness at the edges, faint film grain */
-.noir-bg {
+/* Space: a green tractor beam from above, a purple nebula below, and two layers of stars */
+.space-bg {
   background-color: var(--color-board);
   background-image:
-    radial-gradient(ellipse 70% 45% at 50% -8%, rgb(242 196 109 / 0.18), transparent 70%),
-    radial-gradient(ellipse at 50% 130%, rgb(229 72 77 / 0.12), transparent 55%),
-    repeating-linear-gradient(0deg, rgb(255 255 255 / 0.018) 0 1px, transparent 1px 3px);
+    radial-gradient(ellipse 38% 55% at 50% -12%, rgb(57 255 136 / 0.16), transparent 70%),
+    radial-gradient(ellipse at 15% 110%, rgb(180 140 255 / 0.16), transparent 50%),
+    radial-gradient(ellipse at 90% 100%, rgb(79 216 255 / 0.10), transparent 45%),
+    radial-gradient(1.5px 1.5px at 20px 30px, rgb(255 255 255 / 0.8), transparent 60%),
+    radial-gradient(1px 1px at 90px 120px, rgb(255 255 255 / 0.6), transparent 60%),
+    radial-gradient(1.5px 1.5px at 160px 60px, rgb(180 140 255 / 0.8), transparent 60%),
+    radial-gradient(1px 1px at 60px 170px, rgb(255 255 255 / 0.5), transparent 60%),
+    radial-gradient(1px 1px at 190px 190px, rgb(57 255 136 / 0.6), transparent 60%);
+  background-size: auto, auto, auto, 210px 210px, 210px 210px, 210px 210px, 210px 210px, 210px 210px;
 }
 
-/* A manila case file */
-.case-file {
-  background: linear-gradient(180deg, #f3ead6, #e6d9bb);
-  color: var(--color-paper-ink);
-  box-shadow: 0 10px 30px rgb(0 0 0 / 0.5), inset 0 0 0 1px rgb(0 0 0 / 0.15);
+/* A holographic panel: the secret term, a crew pod, the reveal */
+.holo {
+  background: linear-gradient(160deg, rgb(57 255 136 / 0.10), rgb(180 140 255 / 0.12) 60%, rgb(79 216 255 / 0.08));
+  border: 1px solid rgb(57 255 136 / 0.45);
+  color: var(--color-ink);
+  box-shadow: 0 0 24px rgb(57 255 136 / 0.12), inset 0 0 30px rgb(180 140 255 / 0.08);
+  backdrop-filter: blur(4px);
 }
 
-/* The rubber stamp: CAUGHT, GOT AWAY, IMPOSTER */
+/* The result badge: UNMASKED, ESCAPED, YOU WIN */
 .stamp {
   display: inline-block;
-  border: 4px solid currentColor;
-  border-radius: 6px;
-  padding: 0.1em 0.5em;
+  border: 3px solid currentColor;
+  border-radius: 999px;
+  padding: 0.15em 0.8em;
   font-family: var(--font-display);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  transform: rotate(-6deg);
-  opacity: 0.92;
+  box-shadow: 0 0 18px currentColor, inset 0 0 12px currentColor;
 }
 
-/* Yellow-and-black police tape */
-.tape {
-  background: repeating-linear-gradient(-45deg, #f2c46d 0 16px, #111 16px 32px);
+/* A tractor beam: a glowing green-purple strip */
+.beam {
+  background: linear-gradient(90deg, transparent, #39ff88 20%, #b48cff 50%, #39ff88 80%, transparent);
+  box-shadow: 0 0 14px rgb(57 255 136 / 0.6);
 }
 
-.glow-accent { text-shadow: 0 0 14px rgb(229 72 77 / 0.7), 0 0 34px rgb(229 72 77 / 0.3); }
-.glow-info { text-shadow: 0 0 12px rgb(242 196 109 / 0.6); }
-.box-glow-accent { box-shadow: 0 0 0 1px rgb(229 72 77 / 0.7), 0 0 22px rgb(229 72 77 / 0.35); }
-.box-glow-info { box-shadow: 0 0 0 2px rgb(242 196 109 / 0.8), 0 0 24px rgb(242 196 109 / 0.35); }
+.glow-accent { text-shadow: 0 0 14px rgb(57 255 136 / 0.7), 0 0 34px rgb(57 255 136 / 0.3); }
+.glow-info { text-shadow: 0 0 12px rgb(180 140 255 / 0.7); }
+.box-glow-accent { box-shadow: 0 0 0 1px rgb(57 255 136 / 0.7), 0 0 22px rgb(57 255 136 / 0.35); }
+.box-glow-info { box-shadow: 0 0 0 2px rgb(180 140 255 / 0.8), 0 0 24px rgb(180 140 255 / 0.35); }
 
+/* The result badge beaming in */
 @keyframes stamp-in {
-  0% { transform: scale(2.2) rotate(-6deg); opacity: 0; }
-  70% { transform: scale(0.95) rotate(-6deg); opacity: 1; }
-  100% { transform: scale(1) rotate(-6deg); opacity: 0.92; }
+  0% { transform: scale(0.3); opacity: 0; filter: blur(6px); }
+  70% { transform: scale(1.1); opacity: 1; filter: blur(0); }
+  100% { transform: scale(1); }
 }
-.stamp-in { animation: stamp-in 0.45s ease-out both; }
+.stamp-in { animation: stamp-in 0.5s ease-out both; }
 
+/* The speaker: a pulsing purple beam around them */
 @keyframes spotlight {
-  0%, 100% { box-shadow: 0 0 0 2px rgb(242 196 109 / 0.8), 0 0 18px rgb(242 196 109 / 0.3); }
-  50% { box-shadow: 0 0 0 3px rgb(242 196 109 / 1), 0 0 34px rgb(242 196 109 / 0.55); }
+  0%, 100% { box-shadow: 0 0 0 2px rgb(180 140 255 / 0.8), 0 0 18px rgb(180 140 255 / 0.3); }
+  50% { box-shadow: 0 0 0 3px rgb(180 140 255 / 1), 0 0 34px rgb(180 140 255 / 0.6); }
 }
 .spotlight { animation: spotlight 1.6s ease-in-out infinite; }
 
+/* The alien, bobbing like a hovering saucer */
+@keyframes hover-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.hover-bob { animation: hover-bob 2.4s ease-in-out infinite; display: inline-block; }
+
 @media (prefers-reduced-motion: reduce) {
-  .stamp-in, .spotlight, .animate-pulse { animation: none; }
+  .stamp-in, .spotlight, .hover-bob, .animate-pulse { animation: none; }
 }

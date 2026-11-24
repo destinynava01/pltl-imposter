@@ -9,7 +9,7 @@ const card = 'rounded-xl border-2 border-line bg-card/90 p-6 shadow-lg backdrop-
 const field = 'w-full rounded-lg border-2 border-line bg-panel px-3 py-2 font-bold text-ink outline-none focus:outline-2 focus:outline-info'
 const choice = (on) =>
   `rounded-lg border-2 px-3 py-2 text-sm font-bold transition ${
-    on ? 'border-info bg-warn-soft text-info box-glow-info' : 'border-line bg-panel text-ink hover:bg-hover'
+    on ? 'border-info bg-info-soft text-info box-glow-info' : 'border-line bg-panel text-ink hover:bg-hover'
   }`
 
 // Leader lobby: create game -> groups -> finalize -> subject / course / professor / chapters -> think time and
@@ -146,7 +146,7 @@ export default function Lobby({ onStart, onOpenBoard, hasGame, resume, onCloseGa
   const smallGroups = sizes.filter((n) => n < MIN_GROUP_SIZE).length
 
   return (
-    <main className="noir-bg min-h-dvh p-4 text-ink sm:p-8">
+    <main className="space-bg min-h-dvh p-4 text-ink sm:p-8">
       {hasGame && (
         <button onClick={onOpenBoard} className="fixed right-4 top-4 z-20 rounded-lg border-2 border-line bg-panel px-4 py-2 font-bold hover:bg-hover">
           Back to the game
@@ -203,7 +203,7 @@ export default function Lobby({ onStart, onOpenBoard, hasGame, resume, onCloseGa
           <div className="mt-6 rounded-lg border-2 border-dashed border-line p-4 text-sm text-muted">
             <p className="font-bold text-ink">How a round goes</p>
             <ol className="mt-2 list-decimal space-y-1 pl-5">
-              <li>Phones show the group&apos;s secret term. The imposter only sees the chapter.</li>
+              <li>Phones show the group&apos;s secret term. The alien (the imposter) only sees the chapter.</li>
               <li>Thinking time, then students give one clue each, out loud, in the order on screen.</li>
               <li>The group votes on their phones. A caught imposter gets one guess at the term.</li>
             </ol>
@@ -214,17 +214,17 @@ export default function Lobby({ onStart, onOpenBoard, hasGame, resume, onCloseGa
           <h2 className="font-display text-xl uppercase tracking-wider text-accent">Groups</h2>
           <div className="mt-4 space-y-3">
             {groupNames.map((name, i) => (
-              // A group is a case file: a colored tab and the group's name typed on it
+              // A group is a ship's crew pod: a colored light and the crew's name
               <div key={i} className="relative pt-3">
                 <span
                   aria-hidden="true"
                   className="absolute left-4 top-0 h-4 w-24 rounded-t-md"
                   style={{ background: GROUP_COLORS[i] }}
                 />
-                <div className="case-file relative flex items-center gap-3 rounded-lg px-4 py-3">
-                  <span className="font-mono text-xs uppercase tracking-widest opacity-70">Case {String(i + 1).padStart(2, '0')}</span>
+                <div className="holo relative flex items-center gap-3 rounded-lg px-4 py-3">
+                  <span className="font-mono text-xs uppercase tracking-widest opacity-70">Pod {String(i + 1).padStart(2, '0')}</span>
                   <input
-                    className="min-w-0 flex-1 rounded-md border border-black/20 bg-white/60 px-3 py-1.5 font-mono text-lg font-bold text-paper-ink outline-none focus:border-black/50 disabled:border-transparent disabled:bg-transparent disabled:px-0"
+                    className="min-w-0 flex-1 rounded-md border border-line bg-panel px-3 py-1.5 font-mono text-lg font-bold text-ink outline-none focus:border-accent disabled:border-transparent disabled:bg-transparent disabled:px-0"
                     value={name}
                     maxLength={40}
                     disabled={finalized}
@@ -237,7 +237,7 @@ export default function Lobby({ onStart, onOpenBoard, hasGame, resume, onCloseGa
                       type="button"
                       onClick={() => setGroupNames(groupNames.filter((_, k) => k !== i))}
                       aria-label={`Remove group ${i + 1}`}
-                      className="rounded-md border border-black/20 px-2.5 py-1 font-bold text-paper-ink hover:bg-black/10"
+                      className="rounded-md border border-line px-2.5 py-1 font-bold text-muted hover:bg-hover hover:text-ink"
                     >
                       ✕
                     </button>
@@ -323,8 +323,8 @@ export default function Lobby({ onStart, onOpenBoard, hasGame, resume, onCloseGa
                       const on = pickedTopics.includes(t.id)
                       return (
                         <li key={t.id}>
-                          <label className={`flex cursor-pointer items-center gap-3 rounded-lg border-2 px-3 py-2 text-sm transition hover:bg-hover ${on ? 'border-info bg-warn-soft' : 'border-line bg-panel'}`}>
-                            <input type="checkbox" checked={on} onChange={() => toggleTopic(t.id)} className="h-4 w-4 accent-amber-400" />
+                          <label className={`flex cursor-pointer items-center gap-3 rounded-lg border-2 px-3 py-2 text-sm transition hover:bg-hover ${on ? 'border-info bg-info-soft' : 'border-line bg-panel'}`}>
+                            <input type="checkbox" checked={on} onChange={() => toggleTopic(t.id)} className="h-4 w-4 accent-green-400" />
                             <span className="flex-1 font-bold">{t.topic_name}</span>
                             <span className="text-xs text-muted">{t.term_count} term{t.term_count === 1 ? '' : 's'}</span>
                           </label>
@@ -347,12 +347,12 @@ export default function Lobby({ onStart, onOpenBoard, hasGame, resume, onCloseGa
                     ))}
                   </div>
 
-                  <label className={`mt-4 flex cursor-pointer items-start gap-3 rounded-lg border-2 p-3 ${hardMode ? 'border-accent bg-bad-soft' : 'border-line bg-panel'}`}>
-                    <input type="checkbox" checked={hardMode} onChange={(e) => setHardMode(e.target.checked)} className="mt-1 h-4 w-4 accent-red-500" />
+                  <label className={`mt-4 flex cursor-pointer items-start gap-3 rounded-lg border-2 p-3 ${hardMode ? 'border-accent bg-accent-soft' : 'border-line bg-panel'}`}>
+                    <input type="checkbox" checked={hardMode} onChange={(e) => setHardMode(e.target.checked)} className="mt-1 h-4 w-4 accent-green-400" />
                     <span>
                       <span className="font-bold">Hard mode</span>
                       <span className="block text-sm text-muted">
-                        The imposter gets a similar term from the same chapter and isn&apos;t told they&apos;re the imposter. The group has to spot whose clue doesn&apos;t fit.
+                        The alien gets a similar term from the same chapter and isn&apos;t told they&apos;re the alien. The group has to spot whose clue doesn&apos;t fit.
                       </span>
                     </span>
                   </label>

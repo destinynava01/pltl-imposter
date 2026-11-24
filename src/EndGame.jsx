@@ -3,7 +3,7 @@ import { impGame } from './api'
 import Picture from './Picture'
 import { FLAG_REASONS } from './config'
 import { downloadResults } from './gameResults'
-import { Button, Label, Tape } from './ui'
+import { Button, Label, Beam } from './ui'
 
 const field = 'w-full rounded-lg border-2 border-line bg-panel px-3 py-2 text-ink outline-none focus:outline-2 focus:outline-info'
 
@@ -43,17 +43,17 @@ export default function EndGame({ session, scores, groups, onNewGame, onLobby })
   const podium = placed.filter((s) => s.place <= 3 && s.score > 0)
 
   return (
-    <main className="noir-bg min-h-dvh p-4 text-ink sm:p-8">
+    <main className="space-bg min-h-dvh p-4 text-ink sm:p-8">
       <section className="mx-auto max-w-4xl overflow-hidden rounded-2xl border-2 border-line bg-card shadow-2xl">
-        <Tape />
+        <Beam />
         <div className="p-6 text-center sm:p-8">
-          <Label>Case closed</Label>
+          <Label>Mission over</Label>
           <h1 className="mt-1 font-display text-4xl uppercase tracking-wider text-accent glow-accent sm:text-5xl">Final scores</h1>
 
           {podium.length > 0 && (
             <div className="mt-6 flex flex-wrap items-end justify-center gap-3">
               {podium.map((s) => (
-                <div key={s.id} className={`case-file w-40 rounded-lg p-3 ${s.place === 1 ? 'pb-8' : ''}`}>
+                <div key={s.id} className={`holo w-40 rounded-lg p-3 ${s.place === 1 ? 'pb-8' : ''}`}>
                   <p className="text-3xl">{s.place === 1 ? '🥇' : s.place === 2 ? '🥈' : '🥉'}</p>
                   <p className="truncate font-bold">{s.name}</p>
                   <p className="font-display text-2xl">{s.score} pts</p>
@@ -133,7 +133,7 @@ function RoundRow({ r, session, onFlagged }) {
     }
   }
 
-  const result = !r.finished ? 'Not finished' : !r.caught ? 'Imposter got away' : r.guess_correct ? 'Caught, but guessed it' : 'Imposter caught'
+  const result = !r.finished ? 'Not finished' : !r.caught ? 'Alien escaped' : r.guess_correct ? 'Unmasked, but guessed it' : 'Alien unmasked'
 
   return (
     <li className="rounded-xl border-2 border-line bg-card p-4">
@@ -141,7 +141,7 @@ function RoundRow({ r, session, onFlagged }) {
         <div className="min-w-0">
           <p className="font-mono text-xs uppercase tracking-widest text-muted">Round {r.round_no} · {r.group} · {r.chapter}</p>
           <p className="font-display text-2xl uppercase">{r.term}</p>
-          <p className="text-sm text-muted">Imposter: <b className="text-ink">{r.imposter || '—'}</b> · {result}{r.guess ? ` · guessed "${r.guess}"` : ''}</p>
+          <p className="text-sm text-muted">Alien: <b className="text-ink">{r.imposter || '—'}</b> · {result}{r.guess ? ` · guessed "${r.guess}"` : ''}</p>
         </div>
         <div className="text-right">
           {r.flags.length > 0 && <p className="text-xs font-bold text-warn">🚩 Flagged</p>}

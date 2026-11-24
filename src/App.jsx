@@ -74,9 +74,9 @@ function LeaderApp() {
       <CenterCard title={SITE_NAME}>
         <p className="mt-2 font-mono text-lg text-info">{SITE_TAGLINE}</p>
         <p className="mt-4 text-muted">
-          Each group gets a secret term. One student doesn&apos;t. Take turns giving a clue out loud, then vote out the imposter.
+          Every crew gets a secret term. One of them is an alien who doesn&apos;t know it. Take turns giving a clue out loud, then vote the alien out.
         </p>
-        <Button className="mt-6" onClick={() => setScreen('lobby')}>🕵️ Open Leader Lobby</Button>
+        <Button className="mt-6" onClick={() => setScreen('lobby')}>👽 Open Leader Lobby</Button>
         <a href={HUB_URL} className="mt-4 block text-sm font-bold text-info hover:brightness-125">← All games</a>
       </CenterCard>
     )

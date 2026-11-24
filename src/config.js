@@ -1,6 +1,6 @@
 // Change these to rebrand and re-tune the game.
 export const SITE_NAME = 'PLTL Imposter'
-export const SITE_TAGLINE = 'Everyone knows the word. Except one of you.'
+export const SITE_TAGLINE = 'Everyone knows the word. Except the alien.'
 export const HUB_URL = 'https://pltl-game-hub.vercel.app'
 
 // Thinking time before the clues start (seconds); the server allows 5 to 300
