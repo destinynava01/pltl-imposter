@@ -61,3 +61,22 @@ export const SLIDES = [
     ),
   },
 ]
+
+// The guide's own look (the spaceship: a holographic panel over the starfield, Audiowide lettering in alien green). HowToPlay.jsx reads this; anything left out uses its plain dark look.
+export const SKIN = {
+  backdrop: 'bg-[#05060f]/90',
+  panel: 'holo rounded-3xl !bg-card/95',
+  glow: false,
+  label: 'font-mono text-sm uppercase tracking-[0.3em] text-accent',
+  skip: 'rounded-full border border-line px-3 py-1 font-mono text-sm text-muted hover:bg-hover hover:text-ink',
+  art: 'space-bg rounded-2xl border border-accent/30',
+  step: 'font-mono text-sm uppercase tracking-widest text-info',
+  title: 'font-display text-3xl leading-tight text-accent [text-shadow:0_0_18px_rgb(57_255_136/0.45)] sm:text-4xl',
+  text: 'text-lg leading-relaxed text-ink',
+  footer: 'border-t border-line',
+  check: 'font-mono text-sm text-muted',
+  back: 'rounded-full px-4 py-2 font-bold text-ink hover:bg-hover',
+  next: 'rounded-full bg-accent px-5 py-2 font-display text-on-accent shadow-[0_0_18px_rgb(57_255_136/0.5)] hover:brightness-110',
+  dotOff: '#2c3463',
+  launcher: 'rounded-full border border-accent/60 bg-card px-4 py-2 font-mono text-sm font-bold text-accent shadow-[0_0_18px_rgb(57_255_136/0.3)] hover:bg-hover',
+}
