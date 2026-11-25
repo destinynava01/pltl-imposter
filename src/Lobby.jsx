@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import HowToPlay from './HowToPlay'
+import { SLIDES as HOW_TO_SLIDES } from './howToSlides'
 import { QRCodeSVG } from 'qrcode.react'
 import { impGame, watchGame } from './api'
 import { DEFAULT_THINK, GROUP_COLORS, HUB_URL, MAX_GROUPS, MIN_GROUP_SIZE, MIN_GROUPS, SITE_NAME, THINK_CHOICES } from './config'
@@ -27,6 +29,7 @@ export default function Lobby({ onStart, onOpenBoard, hasGame, resume, onCloseGa
   const [thinkSeconds, setThinkSeconds] = useState(DEFAULT_THINK)
   const [hardMode, setHardMode] = useState(false)
   const [busy, setBusy] = useState(false)
+  const [guide, setGuide] = useState(false) // the how-to guide, shown when Start is pressed (before the clock starts)
   const [errorMessage, setErrorMessage] = useState('')
   const [players, setPlayers] = useState([])
 
@@ -150,6 +153,8 @@ export default function Lobby({ onStart, onOpenBoard, hasGame, resume, onCloseGa
 
   return (
     <main className="space-bg min-h-dvh p-4 text-ink sm:p-8">
+      {/* Start shows the how-to guide first; the game (and its clock) starts when it closes */}
+      {guide && <HowToPlay site="imposter" gameId="lobby" name="Imposter" accent="#39ff88" slides={HOW_TO_SLIDES} open onClose={() => { setGuide(false); start() }} />}
       {hasGame && (
         <button onClick={onOpenBoard} className="fixed right-4 top-4 z-20 rounded-lg border-2 border-line bg-panel px-4 py-2 font-bold hover:bg-hover">
           Back to the game
@@ -378,7 +383,7 @@ export default function Lobby({ onStart, onOpenBoard, hasGame, resume, onCloseGa
                     </p>
                   )}
 
-                  <Button className="mt-4 w-full text-lg" disabled={busy || pickedTopics.length === 0 || termEstimate < 2 || readyGroups === 0} onClick={start}>
+                  <Button className="mt-4 w-full text-lg" disabled={busy || pickedTopics.length === 0 || termEstimate < 2 || readyGroups === 0} onClick={() => (howToSkipped('imposter') ? start() : setGuide(true))}>
                     {busy ? 'Starting…' : 'Start round 1'}
                   </Button>
                 </>
@@ -465,4 +470,13 @@ export default function Lobby({ onStart, onOpenBoard, hasGame, resume, onCloseGa
       </section>
     </main>
   )
+}
+
+// The leader turned the how-to guide off on this computer ("Don't show this again")
+function howToSkipped(site) {
+  try {
+    return Boolean(localStorage.getItem(`pltlHowToSkip:${site}`))
+  } catch {
+    return false
+  }
 }
