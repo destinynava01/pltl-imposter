@@ -84,7 +84,7 @@ export default function Board({ session, onLobby, onNewGame }) {
       <HowToPlay site="imposter" gameId={session.gameId} name="Imposter" accent="#39ff88" slides={HOW_TO_SLIDES} autoOpen={false} note="The round keeps going while this is open." />
       <header className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
         <div>
-          <p className="font-mono text-xs uppercase tracking-[0.3em] text-info">{SITE_NAME} · join code {session.joinCode}</p>
+          <p className="font-mono text-sm uppercase tracking-[0.3em] text-info">{SITE_NAME} · join code {session.joinCode}</p>
           <h1 className="font-display text-3xl uppercase tracking-wider text-accent glow-accent sm:text-4xl">
             {board.game.round_no > 0 ? `Round ${board.game.round_no}` : 'Ready'}
             {board.game.hard_mode && <span className="ml-3 align-middle font-mono text-sm text-warn">hard mode</span>}
@@ -152,7 +152,7 @@ export default function Board({ session, onLobby, onNewGame }) {
               </li>
             ))}
           </ol>
-          <p className="mt-3 border-t border-line pt-2 text-xs text-muted">
+          <p className="mt-3 border-t border-line pt-2 text-sm text-muted">
             Alien unmasked: the rest of the crew +1. Alien escapes, or guesses the term: alien +2.
           </p>
         </aside>
@@ -169,7 +169,7 @@ function GroupCard({ group, thinking, busy, act }) {
     <article className="overflow-hidden rounded-xl border-2 border-line bg-card shadow-lg" style={{ borderTopColor: group.color, borderTopWidth: 8 }}>
       <div className="flex items-center justify-between gap-2 px-4 pt-3">
         <h2 className="font-display text-xl uppercase tracking-wide">{group.name}</h2>
-        <span className="rounded-full border border-line px-3 py-0.5 font-mono text-xs uppercase text-muted">
+        <span className="rounded-full border border-line px-3 py-0.5 font-mono text-sm uppercase text-muted">
           {r ? (thinking && r.phase === 'speak' ? 'Thinking' : PHASE_LABEL[r.phase]) : 'Sitting out'}
         </span>
       </div>
@@ -202,8 +202,8 @@ function GroupCard({ group, thinking, busy, act }) {
             </ol>
             {!thinking && (
               <div className="mt-3 flex flex-wrap gap-2">
-                <Button variant="outline" className="!px-3 !py-1.5 text-xs" disabled={busy} onClick={() => act('skip_speaker')}>Skip speaker</Button>
-                <Button variant="outline" className="!px-3 !py-1.5 text-xs" disabled={busy} onClick={() => act('open_vote')}>Vote now</Button>
+                <Button variant="outline" className="!px-3 !py-1.5 text-sm" disabled={busy} onClick={() => act('skip_speaker')}>Skip speaker</Button>
+                <Button variant="outline" className="!px-3 !py-1.5 text-sm" disabled={busy} onClick={() => act('open_vote')}>Vote now</Button>
               </div>
             )}
           </>
@@ -216,7 +216,7 @@ function GroupCard({ group, thinking, busy, act }) {
             <div className="mx-auto mt-3 h-2 max-w-xs overflow-hidden rounded-full bg-panel">
               <div className="h-full bg-accent transition-all" style={{ width: `${r.voters ? (100 * r.votes_in) / r.voters : 0}%` }} />
             </div>
-            <Button variant="outline" className="mt-3 !px-3 !py-1.5 text-xs" disabled={busy || r.votes_in === 0} onClick={() => act('close_vote')}>
+            <Button variant="outline" className="mt-3 !px-3 !py-1.5 text-sm" disabled={busy || r.votes_in === 0} onClick={() => act('close_vote')}>
               Close the vote
             </Button>
           </div>
@@ -227,7 +227,7 @@ function GroupCard({ group, thinking, busy, act }) {
             <p className="stamp stamp-in text-3xl text-ok">Unmasked</p>
             <p className="mt-3 text-lg"><span className="font-bold text-accent">{r.imposter}</span> was the alien. 👽</p>
             <p className="mt-1 text-muted">They get one guess at the term… if they get it, they still win.</p>
-            <Button variant="outline" className="mt-3 !px-3 !py-1.5 text-xs" disabled={busy} onClick={() => act('skip_guess')}>Skip the guess</Button>
+            <Button variant="outline" className="mt-3 !px-3 !py-1.5 text-sm" disabled={busy} onClick={() => act('skip_guess')}>Skip the guess</Button>
           </div>
         )}
 
@@ -256,7 +256,7 @@ function Reveal({ r }) {
       </div>
 
       {r.tally?.length > 0 && (
-        <ul className="mt-2 flex flex-wrap gap-1.5 text-xs">
+        <ul className="mt-2 flex flex-wrap gap-1.5 text-sm">
           {r.tally.map((t) => (
             <li key={t.name} className={`rounded-full border px-2 py-0.5 ${t.imposter ? 'border-accent text-accent' : 'border-line text-muted'}`}>
               {t.name}: {t.votes}
@@ -266,7 +266,7 @@ function Reveal({ r }) {
       )}
 
       <div className="holo mt-4 rounded-lg p-4">
-        <p className="font-mono text-xs uppercase tracking-widest opacity-70">Secret term · {r.chapter}</p>
+        <p className="font-mono text-sm uppercase tracking-widest opacity-70">Secret term · {r.chapter}</p>
         <p className="font-display text-3xl uppercase">{r.term}</p>
         {r.decoy && <p className="mt-1 font-mono text-sm">The alien had: <b>{r.decoy}</b></p>}
         {r.question_text && <p className="mt-3 border-t border-line pt-2 text-sm">{r.question_text}</p>}

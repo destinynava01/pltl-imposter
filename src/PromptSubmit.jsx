@@ -86,7 +86,7 @@ export default function PromptSubmit() {
         <header className="text-center">
           <p className="font-mono text-xs uppercase tracking-[0.4em] text-bad">● New terms needed</p>
           <h1 className="mt-2 font-display text-3xl uppercase tracking-wider text-accent glow-accent sm:text-4xl">Submit Terms</h1>
-          <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.3em] text-muted">PLTL Imposter</p>
+          <p className="mt-1 font-mono text-[0.8rem] uppercase tracking-[0.3em] text-muted">PLTL Imposter</p>
           <p className="mt-3 text-muted">
             Each prompt is a <b className="text-ink">category</b> the crew gives examples of (&ldquo;Stages of mitosis&rdquo;:
             prophase, anaphase...). Add a <b className="text-ink">similar category</b> for the alien in hard mode
