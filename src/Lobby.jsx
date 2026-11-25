@@ -12,7 +12,7 @@ const choice = (on) =>
     on ? 'border-info bg-info-soft text-info box-glow-info' : 'border-line bg-panel text-ink hover:bg-hover'
   }`
 
-// Leader lobby: create game -> groups -> finalize -> subject / course / professor / chapters -> think time and
+// Leader lobby: create game -> groups -> finalize -> subject / course / chapters (no professor step) -> think time and
 // mode -> start. Students join from their phones; the leader approves them into groups.
 export default function Lobby({ onStart, onOpenBoard, hasGame, resume, onCloseGame }) {
   const [catalog, setCatalog] = useState(null)
@@ -126,8 +126,9 @@ export default function Lobby({ onStart, onOpenBoard, hasGame, resume, onCloseGa
         game_id: session.gameId,
         host_token: session.hostToken,
         course_name: course.course_name,
-        professor_name: course.shared_curriculum ? '' : professor.professor_name,
-        topic_ids: pickedTopics,
+        professor_name: '',
+        // A chapter can stand for the same chapter under several professors: send all of its ids
+        topic_ids: topics.filter((t) => pickedTopics.includes(t.id)).flatMap((t) => t.ids ?? [t.id]),
         team_names: groupNames.map((_, i) => groupLabel(i)),
         think_seconds: thinkSeconds,
         hard_mode: hardMode,

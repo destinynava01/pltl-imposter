@@ -84,7 +84,7 @@ export function ChapterSelect({ courses, value, onChange, className = '' }) {
     <select value={value} onChange={(e) => onChange(e.target.value)} className={className}>
       {courses.flatMap((c) =>
         c.professors.map((p) => (
-          <optgroup key={`${c.course_name}|${p.professor_name}`} label={c.shared_curriculum ? c.course_name : `${c.course_name} · ${p.professor_name}`}>
+          <optgroup key={`${c.course_name}|${p.professor_name}`} label={c.shared_curriculum || !p.professor_name ? c.course_name : `${c.course_name} · ${p.professor_name}`}>
             {p.topics.map((t) => <option key={t.id} value={t.id}>{t.topic_name}</option>)}
           </optgroup>
         )),
