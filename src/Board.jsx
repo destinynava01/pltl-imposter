@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
+import HowToPlay from './HowToPlay'
+import { SLIDES as HOW_TO_SLIDES } from './howToSlides'
 import { impGame, watchGame } from './api'
 import EndGame from './EndGame'
 import Picture from './Picture'
@@ -78,6 +80,8 @@ export default function Board({ session, onLobby, onNewGame }) {
 
   return (
     <main className="space-bg min-h-dvh p-4 text-ink sm:p-6">
+      {/* The visual how-to guide: opens once per game, skippable */}
+      <HowToPlay site="imposter" gameId={session.gameId} name="Imposter" accent="#39ff88" slides={HOW_TO_SLIDES} />
       <header className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
         <div>
           <p className="font-mono text-xs uppercase tracking-[0.3em] text-info">{SITE_NAME} · join code {session.joinCode}</p>
