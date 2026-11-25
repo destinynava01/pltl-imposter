@@ -139,12 +139,12 @@ function PromptCard({ p, tab, courses, picked, onPick, act }) {
   const [draft, setDraft] = useState(null)
 
   const startEdit = () => {
-    setDraft({ term: p.term, description: p.description, also: p.accepted_answers.join(', '), topic_id: p.topic_id })
+    setDraft({ term: p.term, description: p.description, decoy: p.decoy ?? '', also: p.accepted_answers.join(', '), topic_id: p.topic_id })
     setEditing(true)
   }
   async function save() {
     const ok = await act({
-      action: 'save', id: p.id, term: draft.term, description: draft.description, topic_id: draft.topic_id,
+      action: 'save', id: p.id, term: draft.term, description: draft.description, decoy: draft.decoy, topic_id: draft.topic_id,
       accepted_answers: draft.also.split(',').map((a) => a.trim()).filter(Boolean),
     }, 'Saved.')
     if (ok) setEditing(false)
@@ -158,7 +158,8 @@ function PromptCard({ p, tab, courses, picked, onPick, act }) {
           <div className="min-w-0 flex-1">
             <p className="font-mono text-xs uppercase tracking-widest text-muted">{p.course_name} · {p.professor_name} · {p.topic_name}</p>
             <p className="font-display text-xl uppercase">{p.term}</p>
-            <p className="mt-1 text-sm">{p.description}</p>
+            <p className="mt-1 text-sm"><span className="text-muted">Examples:</span> {p.description}</p>
+            <p className="mt-1 text-sm"><span className="text-muted">Alien&apos;s category (hard mode):</span> {p.decoy || <span className="text-warn">none yet</span>}</p>
             {p.accepted_answers.length > 0 && <p className="mt-1 text-xs text-muted">Also accepts: {p.accepted_answers.join(', ')}</p>}
             <p className="mt-1 text-xs text-muted">
               From {p.submitter_name || 'unknown'}{p.submitter_note ? ` · "${p.submitter_note}"` : ''}
@@ -190,7 +191,8 @@ function PromptCard({ p, tab, courses, picked, onPick, act }) {
       ) : (
         <div className="space-y-2">
           <input className={`${field} font-display text-lg uppercase`} maxLength={60} value={draft.term} onChange={(e) => setDraft({ ...draft, term: e.target.value })} />
-          <textarea className={field} rows={2} maxLength={600} value={draft.description} onChange={(e) => setDraft({ ...draft, description: e.target.value })} />
+          <textarea className={field} rows={2} maxLength={600} placeholder="Examples" value={draft.description} onChange={(e) => setDraft({ ...draft, description: e.target.value })} />
+          <input className={field} maxLength={60} placeholder="Alien's similar category (hard mode)" value={draft.decoy} onChange={(e) => setDraft({ ...draft, decoy: e.target.value })} />
           <input className={field} maxLength={200} placeholder="Also accept, comma separated" value={draft.also} onChange={(e) => setDraft({ ...draft, also: e.target.value })} />
           <ChapterSelect courses={courses} value={draft.topic_id} onChange={(topic_id) => setDraft({ ...draft, topic_id })} className={field} />
           <div className="flex gap-2 text-sm font-bold">

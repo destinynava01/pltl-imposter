@@ -4,7 +4,7 @@ import ChapterPicker from './ChapterPicker'
 import { Beam } from './ui'
 
 const field = 'w-full rounded-lg border-2 border-line bg-panel px-3 py-2 text-ink outline-none placeholder-muted focus:border-accent'
-const blank = () => ({ term: '', description: '', also: '' })
+const blank = () => ({ term: '', description: '', decoy: '', also: '' })
 
 // The public form: pick a chapter, then add terms (each with a short description to teach from). They wait in
 // Imposter's review queue until a reviewer approves them.
@@ -41,6 +41,7 @@ export default function PromptSubmit() {
         prompts: filled.map((r) => ({
           term: r.term,
           description: r.description,
+          decoy: r.decoy,
           accepted_answers: r.also.split(',').map((a) => a.trim()).filter(Boolean),
         })),
       })
@@ -87,8 +88,9 @@ export default function PromptSubmit() {
           <h1 className="mt-2 font-display text-3xl uppercase tracking-wider text-accent glow-accent sm:text-4xl">Submit Terms</h1>
           <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.3em] text-muted">PLTL Imposter</p>
           <p className="mt-3 text-muted">
-            Add terms students can describe out loud: a structure, a process, a molecule, a concept. Good terms have a few
-            clear clues (&ldquo;Mitochondria&rdquo;: energy, ATP, double membrane), not labels on a picture.
+            Each prompt is a <b className="text-ink">category</b> the crew gives examples of (&ldquo;Stages of mitosis&rdquo;:
+            prophase, anaphase...). Add a <b className="text-ink">similar category</b> for the alien in hard mode
+            (&ldquo;Cell cycle&rdquo;), so their clues almost fit (&ldquo;interphase&rdquo; gives them away).
             A PLTL reviewer checks each one before it&apos;s used. Up to {max} at a time.
           </p>
         </header>
@@ -109,12 +111,14 @@ export default function PromptSubmit() {
                     <button type="button" onClick={() => setRows(rows.filter((_, k) => k !== i))} className="text-xs font-bold text-bad">Remove</button>
                   )}
                 </div>
-                <input className={`${field} font-display text-lg uppercase`} maxLength={60} placeholder="Term (e.g. Osmosis)"
+                <input className={`${field} font-display text-lg uppercase`} maxLength={60} placeholder="Category (e.g. Stages of mitosis)"
                   value={r.term} onChange={(e) => update(i, 'term', e.target.value)} />
                 <textarea className={field} rows={2} maxLength={600}
-                  placeholder="Short description, shown after the round to teach from (e.g. Water moving across a membrane toward the higher solute concentration.)"
+                  placeholder="Examples, shown after the round (e.g. prophase, metaphase, anaphase, telophase)"
                   value={r.description} onChange={(e) => update(i, 'description', e.target.value)} />
-                <input className={`${field} text-sm`} maxLength={200} placeholder="Also accept, comma separated (optional): other names a caught alien could guess"
+                <input className={field} maxLength={60} placeholder="Similar category for the alien in hard mode (e.g. Cell cycle)"
+                  value={r.decoy} onChange={(e) => update(i, 'decoy', e.target.value)} />
+                <input className={`${field} text-sm`} maxLength={200} placeholder="Also accept, comma separated (optional): other ways a caught alien could name it (e.g. Mitosis phases)"
                   value={r.also} onChange={(e) => update(i, 'also', e.target.value)} />
               </div>
             ))}
@@ -137,7 +141,7 @@ export default function PromptSubmit() {
             >
               {busy ? 'Sending…' : `Send ${filled.length || ''} term${filled.length === 1 ? '' : 's'} for review`}
             </button>
-            {filled.some((r) => !r.description.trim()) && <p className="text-xs text-warn">Every term needs a short description.</p>}
+            {filled.some((r) => !r.description.trim()) && <p className="text-xs text-warn">Every category needs a few examples.</p>}
           </section>
         )}
         {error && <p className="font-bold text-bad">{error}</p>}

@@ -223,8 +223,7 @@ function RoundView({ round, thinkingLeft, sending, send }) {
             <>
               <p className="text-6xl" aria-hidden="true"><span className="hover-bob">👽</span></p>
               <p className="mt-2 font-display text-3xl uppercase text-accent glow-accent">You&apos;re the alien</p>
-              <p className="mt-2 font-mono">Topic: <b>{round.chapter}</b></p>
-              <p className="mt-2 text-sm text-muted">You don&apos;t know the term. Listen to the crew and give a clue that blends in.</p>
+              <p className="mt-2 text-sm text-muted">You don&apos;t know the secret category. Listen to the crew&apos;s clues, figure it out, and give a clue that blends in.</p>
             </>
           ) : (
             <>
