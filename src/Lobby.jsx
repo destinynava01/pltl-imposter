@@ -147,6 +147,7 @@ export default function Lobby({ onStart, onOpenBoard, hasGame, resume, onCloseGa
   const joinUrl = session ? `${window.location.origin}/join?code=${session.joinCode}` : ''
   const sizes = groupNames.map((_, i) => players.filter((p) => p.approval_status === 'approved' && p.team_index === i).length)
   const smallGroups = sizes.filter((n) => n < MIN_GROUP_SIZE).length
+  const readyGroups = sizes.length - smallGroups // groups that can play (the game needs at least one)
 
   return (
     <main className="space-bg min-h-dvh p-4 text-ink sm:p-8">
@@ -259,7 +260,7 @@ export default function Lobby({ onStart, onOpenBoard, hasGame, resume, onCloseGa
               + Add group ({groupNames.length}/{MAX_GROUPS})
             </Button>
           )}
-          <p className="mt-2 text-xs text-muted">Groups of 4 to 8 work best. Every group needs at least {MIN_GROUP_SIZE} students to start.</p>
+          <p className="mt-2 text-xs text-muted">Groups of 4 to 8 work best. One group is enough to start; a group needs {MIN_GROUP_SIZE} students to play.</p>
 
           <Button className="mt-4 w-full" disabled={!session || finalized || busy} onClick={finalizeGroups}>
             {finalized ? 'Groups finalized' : 'Finalize groups'}
@@ -379,14 +380,16 @@ export default function Lobby({ onStart, onOpenBoard, hasGame, resume, onCloseGa
                     </span>
                   </label>
 
-                  {smallGroups > 0 && (
+                  {readyGroups === 0 ? (
+                    <p className="mt-3 text-sm font-bold text-bad">At least one group needs {MIN_GROUP_SIZE} students to start.</p>
+                  ) : smallGroups > 0 && (
                     <p className="mt-3 text-sm font-bold text-warn">
-                      Every group needs at least {MIN_GROUP_SIZE} students to start. Still short:{' '}
+                      These groups have fewer than {MIN_GROUP_SIZE} and will sit out until they have enough:{' '}
                       {groupNames.map((_, i) => i).filter((i) => sizes[i] < MIN_GROUP_SIZE).map((i) => `${groupLabel(i)} (${sizes[i]})`).join(', ')}.
                     </p>
                   )}
 
-                  <Button className="mt-4 w-full text-lg" disabled={busy || pickedTopics.length === 0 || termEstimate < 2 || smallGroups > 0} onClick={start}>
+                  <Button className="mt-4 w-full text-lg" disabled={busy || pickedTopics.length === 0 || termEstimate < 2 || readyGroups === 0} onClick={start}>
                     {busy ? 'Starting…' : 'Start round 1'}
                   </Button>
                 </>
