@@ -154,7 +154,7 @@ export default function Lobby({ onStart, onOpenBoard, hasGame, resume, onCloseGa
   return (
     <main className="space-bg min-h-dvh p-4 text-ink sm:p-8">
       {/* Start shows the how-to guide first; the game (and its clock) starts when it closes */}
-      {guide && <HowToPlay site="imposter" gameId="lobby" name="Imposter" accent="#39ff88" slides={HOW_TO_SLIDES} open onClose={() => { setGuide(false); start() }} />}
+      {guide && <HowToPlay site="imposter" gameId={session?.gameId ?? 'lobby'} name="Imposter" accent="#39ff88" slides={HOW_TO_SLIDES} open onClose={() => { setGuide(false); start() }} />}
       {hasGame && (
         <button onClick={onOpenBoard} className="fixed right-4 top-4 z-20 rounded-lg border-2 border-line bg-panel px-4 py-2 font-bold hover:bg-hover">
           Back to the game
