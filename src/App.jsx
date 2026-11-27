@@ -9,6 +9,7 @@ import { HUB_URL, SITE_NAME, SITE_TAGLINE } from './config'
 import { readSession, saveSession } from './session'
 import { isConfigured } from './supabase'
 import { Button, CenterCard } from './ui'
+import { SLIDES as LANDING_SLIDES } from './howToSlides'
 
 // Routes:
 //   /       leader: landing -> lobby -> board (the projector)
@@ -78,6 +79,7 @@ function LeaderApp() {
     return (
       <CenterCard title={SITE_NAME}>
         <p className="mt-2 font-mono text-lg text-info">{SITE_TAGLINE}</p>
+        <div className="mt-6 flex justify-center text-left [&>*]:max-w-full">{LANDING_SLIDES[0].art}</div>
         <p className="mt-4 text-muted">
           Every crew gets a secret term. One of them is an alien who doesn&apos;t know it. Take turns giving a clue out loud, then vote the alien out.
         </p>
